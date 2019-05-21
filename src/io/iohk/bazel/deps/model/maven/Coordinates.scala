@@ -30,8 +30,18 @@ object Coordinates {
     }
 
     override def hashCode: Int = asString.hashCode
-    def url: String =
-      s"https://repo1.maven.org/maven2/${group.asString.replaceAllLiterally(".", "/")}/${artifactId.asString}/${version.asString}/${artifactId.asString}-${version.asString}.jar"
+
+    private def baseURL = {
+      s"https://repo1.maven.org/maven2/${group.asString.replaceAllLiterally(".", "/")}/${artifactId.asString}/${version.asString}/${artifactId.asString}-${version.asString}"
+    }
+
+    def url: String = {
+      s"${baseURL}.jar"
+    }
+
+    def sourcesURL: String = {
+      s"${baseURL}-sources.jar"
+    }
 
 
     private lazy val jarContent: Array[Byte] = {

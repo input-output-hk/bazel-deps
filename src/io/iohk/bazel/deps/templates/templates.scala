@@ -154,17 +154,22 @@ package object templates {
         |""".stripMargin
 
   def workspace(mavenCoordinates: Set[Coordinates.Versioned]): String = {
-    def toImport(v: Coordinates.Versioned, neverlink: Boolean): String =
+    def toImport(v: Coordinates.Versioned, neverlink: Boolean): String = {
       s"""|  java_import_external(
           |      name = "${v.unversioned.asBazelWorkspaceName(neverlink)}",
           |      licenses = ["notice"],
           |      jar_urls = [
           |          "${v.url}"
           |      ],
+          |      srcjar_urls = [
+          |          "${v.sourcesURL}"
+          |      ],
           |      jar_sha256 = "${v.sha256}",
-          |      neverlink=${if(neverlink) "1" else "0"}
+          |      neverlink=${if (neverlink) "1" else "0"}
           |  )
           |""".stripMargin
+    }
+
     def toImports(v: Coordinates.Versioned): String = toImport(v, false) + toImport(v, true)
     s"""|${notice("# ")}
         |
